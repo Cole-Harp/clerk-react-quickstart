@@ -1,12 +1,28 @@
-from flask import Flask, jsonify
-from flask_cors import CORS
+from flask import Flask, jsonify, make_response, request
+from flask_migrate import Migrate
+from flask_restful import Api, Resource
+
+# from models import db, User
 
 app = Flask(__name__)
-CORS(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = ''
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.json.compact = False
 
-@app.route('/')
-def home():
-    return jsonify(message="Hello from Flask!"), 200
+# migrate = Migrate(app, db)
+# db.init_app(app)
+
+api = Api(app)
+
+class Home(Resource):
+
+    def get(self):
+
+        return make_response(
+            {'Message': 'Hello'}
+        )
+
+api.add_resource(Home, '/')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=5555, debug=True)
